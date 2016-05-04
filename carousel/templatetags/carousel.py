@@ -7,9 +7,12 @@ register = template.Library()
 
 @register.simple_tag
 def carousel(slug):
-    carousel = models.Carousel.objects.get(slug=slug)
+    try:
+        carousel = models.Carousel.objects.get(slug=slug)
 
-    carousel_template = loader.get_template("carousel/carousel.html")
-    return carousel_template.render({
-        'carousel': carousel
-    })
+        carousel_template = loader.get_template("carousel/carousel.html")
+        return carousel_template.render({
+            'carousel': carousel
+        })
+    except models.Carousel.DoesNotExist:
+        return ''
